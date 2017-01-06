@@ -3,6 +3,7 @@ package error
 import (
 	"fmt"
 	. "github.com/mtfelian/utils"
+	"errors"
 )
 
 // CodeSuccess is a success error code
@@ -22,6 +23,14 @@ func (err StandardError) Error() string {
 		return fmt.Sprintf("%d: %s", err.Code, *err.Message)
 	}
 	return fmt.Sprintf("%d", err.Code)
+}
+
+// E преобразует StandardError к типу error
+func (err StandardError) E() error {
+	if err.Occurred() {
+		return errors.New(err.Error())
+	}
+	return nil
 }
 
 // Occurred return true if it is an error, otherwise returns false,
