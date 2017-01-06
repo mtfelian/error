@@ -33,3 +33,11 @@ func (err StandardError) Occurred() bool {
 func Successful() StandardError {
 	return StandardError{CodeSuccess, nil}
 }
+
+// MayError makes StandardError from builtin error
+func MayError(code uint, err error) StandardError {
+	if err != nil {
+		return StandardError{code, err.Error()}
+	}
+	return Successful()
+}
