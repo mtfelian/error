@@ -19,3 +19,9 @@ type StandardError struct {
 func (err StandardError) Error() string {
 	return fmt.Sprintf("%d: %s", err.Code, err.Message)
 }
+
+// Occurred return true if it is an error, otherwise returns false,
+// this check is analogous to (err != nil)
+func (err StandardError) Occurred() bool {
+	return err.Code != CodeSuccess
+}
