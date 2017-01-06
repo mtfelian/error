@@ -34,10 +34,15 @@ func Successful() StandardError {
 	return StandardError{CodeSuccess, nil}
 }
 
+// NewError returns new standard error with code and message from builtin error
+func NewError(code uint, err error) StandardError {
+	return StandardError{code, err.Error()}
+}
+
 // MayError makes StandardError from builtin error
 func MayError(code uint, err error) StandardError {
 	if err != nil {
-		return StandardError{code, err.Error()}
+		return NewError(code, err)
 	}
 	return Successful()
 }
