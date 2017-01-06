@@ -54,7 +54,7 @@ func (err StandardError) Code() uint {
 // Message returns an error message
 func (err StandardError) Message() string {
 	if err.FMessage == nil {
-		return ""
+		return "<no message>"
 	}
 	return *err.FMessage
 }
