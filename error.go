@@ -2,6 +2,7 @@ package error
 
 import (
 	"fmt"
+	. "github.com/mtfelian/utils"
 )
 
 // CodeSuccess is a success error code
@@ -36,7 +37,12 @@ func Successful() StandardError {
 
 // NewError returns new standard error with code and message from builtin error
 func NewError(code uint, err error) StandardError {
-	return StandardError{code, err.Error()}
+	return StandardError{code, PString(err.Error())}
+}
+
+// NewErrorf return new standard error with code, message msg and optional printf args
+func NewErrorf(code uint, msg string, args ...interface{}) StandardError {
+	return StandardError{code, PString(fmt.Sprintf(msg, args...))}
 }
 
 // MayError makes StandardError from builtin error
