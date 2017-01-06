@@ -12,12 +12,15 @@ const (
 // StandardError is a standard error to return with Gin
 type StandardError struct {
 	Code    uint   `json:"code"`
-	Message string `json:"error"`
+	Message *string `json:"error,omitempty"`
 }
 
 // Error implements builtin error interface
 func (err StandardError) Error() string {
-	return fmt.Sprintf("%d: %s", err.Code, err.Message)
+	if err.Message != nil {
+		return fmt.Sprintf("%d: %s", err.Code, *err.Message)
+	}
+	return fmt.Sprintf("%d", err.Code)
 }
 
 // Occurred return true if it is an error, otherwise returns false,
