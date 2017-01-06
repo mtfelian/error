@@ -28,11 +28,6 @@ func (err StandardError) Error() string {
 	return fmt.Sprintf("%d: %s", err.Code(), err.Message())
 }
 
-// Successful return succes as standard error
-func Successful() Error {
-	return nil
-}
-
 // NewError returns new standard error with code and message from builtin error
 func NewError(code uint, err error) Error {
 	return StandardError{code, PString(err.Error())}
