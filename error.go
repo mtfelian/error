@@ -28,3 +28,8 @@ func (err StandardError) Error() string {
 func (err StandardError) Occurred() bool {
 	return err.Code != CodeSuccess
 }
+
+// Successful return succes as standard error
+func Successful() StandardError {
+	return StandardError{CodeSuccess, nil}
+}
