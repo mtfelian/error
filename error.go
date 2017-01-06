@@ -3,7 +3,6 @@ package error
 import (
 	"fmt"
 	. "github.com/mtfelian/utils"
-	"errors"
 )
 
 // CodeSuccess is a success error code
@@ -13,51 +12,54 @@ const (
 
 // StandardError is a standard error to return with Gin
 type StandardError struct {
-	Code    uint   `json:"code"`
-	Message *string `json:"error,omitempty"`
+	FCode    uint   `json:"code"`
+	FMessage *string `json:"error,omitempty"`
+}
+
+// IStandardError is an interface for standard error
+type IStandardError interface {
+	error
+	Code() uint
+	Message() string
 }
 
 // Error implements builtin error interface
 func (err StandardError) Error() string {
-	if err.Message != nil {
-		return fmt.Sprintf("%d: %s", err.Code, *err.Message)
-	}
-	return fmt.Sprintf("%d", err.Code)
-}
-
-// E преобразует StandardError к типу error
-func (err StandardError) E() error {
-	if err.Occurred() {
-		return errors.New(err.Error())
-	}
-	return nil
-}
-
-// Occurred return true if it is an error, otherwise returns false,
-// this check is analogous to (err != nil)
-func (err StandardError) Occurred() bool {
-	return err.Code != CodeSuccess
+	return fmt.Sprintf("%d: %s", err.Code(), err.Message())
 }
 
 // Successful return succes as standard error
-func Successful() StandardError {
-	return StandardError{CodeSuccess, nil}
+func Successful() IStandardError {
+	return nil
 }
 
 // NewError returns new standard error with code and message from builtin error
-func NewError(code uint, err error) StandardError {
+func NewError(code uint, err error) IStandardError {
 	return StandardError{code, PString(err.Error())}
 }
 
 // NewErrorf return new standard error with code, message msg and optional printf args
-func NewErrorf(code uint, msg string, args ...interface{}) StandardError {
+func NewErrorf(code uint, msg string, args ...interface{}) IStandardError {
 	return StandardError{code, PString(fmt.Sprintf(msg, args...))}
 }
 
 // MayError makes StandardError from builtin error
-func MayError(code uint, err error) StandardError {
-	if err != nil {
-		return NewError(code, err)
+func MayError(code uint, err error) IStandardError {
+	if err == nil {
+		return nil
 	}
-	return Successful()
+	return NewError(code, err)
+}
+
+// Code returns an error code
+func (err StandardError) Code() uint {
+	return err.FCode
+}
+
+// Message returns an error message
+func (err StandardError) Message() string {
+	if err.FMessage == nil {
+		return ""
+	}
+	return *err.FMessage
 }
