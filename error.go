@@ -16,8 +16,8 @@ type StandardError struct {
 	FMessage *string `json:"error,omitempty"`
 }
 
-// IStandardError is an interface for standard error
-type IStandardError interface {
+// Error is an interface for error
+type Error interface {
 	error
 	Code() uint
 	Message() string
@@ -29,22 +29,22 @@ func (err StandardError) Error() string {
 }
 
 // Successful return succes as standard error
-func Successful() IStandardError {
+func Successful() Error {
 	return nil
 }
 
 // NewError returns new standard error with code and message from builtin error
-func NewError(code uint, err error) IStandardError {
+func NewError(code uint, err error) Error {
 	return StandardError{code, PString(err.Error())}
 }
 
 // NewErrorf return new standard error with code, message msg and optional printf args
-func NewErrorf(code uint, msg string, args ...interface{}) IStandardError {
+func NewErrorf(code uint, msg string, args ...interface{}) Error {
 	return StandardError{code, PString(fmt.Sprintf(msg, args...))}
 }
 
 // MayError makes StandardError from builtin error
-func MayError(code uint, err error) IStandardError {
+func MayError(code uint, err error) Error {
 	if err == nil {
 		return nil
 	}
