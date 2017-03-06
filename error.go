@@ -58,3 +58,8 @@ func (err StandardError) Message() string {
 	}
 	return *err.FMessage
 }
+
+// String реализует интерфейс stringer
+func (err StandardError) String() string {
+	return fmt.Sprintf("%d: %s", err.Code(), err.Message())
+}
