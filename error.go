@@ -12,7 +12,7 @@ const (
 
 // StandardError is a standard error to return with Gin
 type StandardError struct {
-	FCode    uint   `json:"code"`
+	FCode    uint    `json:"code"`
 	FMessage *string `json:"error,omitempty"`
 }
 
